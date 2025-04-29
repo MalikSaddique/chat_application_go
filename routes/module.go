@@ -7,18 +7,16 @@ import (
 )
 
 type Router struct {
-	Engine      *gin.Engine
-	AuthService authservice.AuthService
-	// UserService userservice.UserService
+	Engine         *gin.Engine
+	AuthService    authservice.AuthService
 	MessageService messageservice.MessageService
 }
 
 func NewRouter(authService authservice.AuthService, messageService messageservice.MessageService) *Router {
 	engine := gin.Default()
 	router := &Router{
-		Engine:      engine,
-		AuthService: authService,
-		// UserService: userService,
+		Engine:         engine,
+		AuthService:    authService,
 		MessageService: messageService,
 	}
 	router.defineRoutes()

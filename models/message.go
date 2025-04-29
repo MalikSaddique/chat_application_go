@@ -1,12 +1,14 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Message struct {
 	ID        int       `json:"id" db:"id"`
 	Sender    string    `json:"sender" db:"sender"`
 	Receiver  string    `json:"receiver" db:"receiver"`
-	Content   string    `json:"content" db:"content"`
+	Message   string    `json:"message" db:"content"`
 	Timestamp time.Time `json:"timestamp" db:"timestamp"`
 }
 

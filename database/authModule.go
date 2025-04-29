@@ -13,6 +13,7 @@ type Storage interface {
 	FindUserByEmail(email string) (*models.UserLogin, error)
 	SignUp(c *gin.Context, req *models.UserSignUp) *models.UserSignUp
 	SaveMessage(senderID string, msg models.SendMessageRequest) error
+	FetchMessages(senderID, receiverID string) ([]models.Message, error)
 }
 
 type StorageImpl struct {
