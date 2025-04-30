@@ -1,4 +1,4 @@
-package routes
+package router
 
 import (
 	"net/http"
@@ -13,7 +13,7 @@ import (
 // @Tags         auth
 // @Accept       json
 // @Produce      json
-// @Param        user  body  models.User  true  "User Credentials"
+// @Param        user  body  models.UserLoginReq  true  "User Credentials"
 // @Success      200
 // @Failure      401
 // @Router       /login [post]
@@ -46,7 +46,7 @@ func (r *Router) Login(c *gin.Context) {
 // @Tags         auth
 // @Accept       json
 // @Produce      json
-// @Param        user  body  models.User  true  "User Info"
+// @Param        user  body  models.UserLoginReq  true  "User Info"
 // @Success      201
 // @Failure      400
 // @Router       /signup [post]

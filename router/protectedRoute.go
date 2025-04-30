@@ -1,4 +1,4 @@
-package routes
+package router
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 func (r *Router) SendMessage(c *gin.Context) {
 	userID := c.MustGet("userID").(string)
 
-	var msg models.SendMessageRequest
+	var msg models.Message
 	if err := c.ShouldBindJSON(&msg); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return

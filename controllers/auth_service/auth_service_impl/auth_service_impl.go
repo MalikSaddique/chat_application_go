@@ -1,12 +1,12 @@
 package authserviceimpl
 
 import (
-	"github.com/MalikSaddique/chat_application_go/database"
-	authservice "github.com/MalikSaddique/chat_application_go/service/auth_service"
+	authservice "github.com/MalikSaddique/chat_application_go/controllers/auth_service"
+	"github.com/MalikSaddique/chat_application_go/db"
 )
 
 type AuthServiceImpl struct {
-	userAuth database.Storage
+	userAuth db.Storage
 }
 
 func NewAuthService(input NewAuthServiceImpl) authservice.AuthService {
@@ -16,5 +16,5 @@ func NewAuthService(input NewAuthServiceImpl) authservice.AuthService {
 }
 
 type NewAuthServiceImpl struct {
-	UserAuth database.Storage
+	UserAuth db.Storage
 }

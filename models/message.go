@@ -5,14 +5,14 @@ import (
 )
 
 type Message struct {
-	ID        int       `json:"id" db:"id"`
-	Sender    string    `json:"sender" db:"sender"`
-	Receiver  string    `json:"receiver" db:"receiver"`
-	Message   string    `json:"message" db:"content"`
-	Timestamp time.Time `json:"timestamp" db:"timestamp"`
+	// ID         primitive.ObjectID `bson:"_id,omitempty"`
+	SenderID   int64     `bson:"sender_id"`
+	ReceiverID int64     `bson:"receiver_id"`
+	Message    string    `bson:"message"`
+	Timestamp  time.Time `bson:"timestamp"`
 }
 
 type SendMessageRequest struct {
-	ReceiverID string `json:"receiver_id" binding:"required"`
-	Message    string `json:"message" binding:"required"`
+	ReceiverID string `bson:"receiver_id"`
+	Message    string `bson:"message"`
 }

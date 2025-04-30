@@ -1,4 +1,4 @@
-package routes
+package router
 
 import (
 	"github.com/MalikSaddique/chat_application_go/middleware"

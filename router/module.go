@@ -1,8 +1,8 @@
-package routes
+package router
 
 import (
-	authservice "github.com/MalikSaddique/chat_application_go/service/auth_service"
-	messageservice "github.com/MalikSaddique/chat_application_go/service/message_service"
+	authservice "github.com/MalikSaddique/chat_application_go/controllers/auth_service"
+	messageservice "github.com/MalikSaddique/chat_application_go/controllers/message_service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,11 +14,11 @@ type Router struct {
 
 func NewRouter(authService authservice.AuthService, messageService messageservice.MessageService) *Router {
 	engine := gin.Default()
-	router := &Router{
+	routes := &Router{
 		Engine:         engine,
 		AuthService:    authService,
 		MessageService: messageService,
 	}
-	router.defineRoutes()
-	return router
+	routes.defineRoutes()
+	return routes
 }

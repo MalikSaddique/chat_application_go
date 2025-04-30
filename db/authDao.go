@@ -1,4 +1,4 @@
-package database
+package db
 
 import (
 	"database/sql"
@@ -12,8 +12,8 @@ import (
 type Storage interface {
 	FindUserByEmail(email string) (*models.UserLogin, error)
 	SignUp(c *gin.Context, req *models.UserSignUp) *models.UserSignUp
-	SaveMessage(senderID string, msg models.SendMessageRequest) error
-	FetchMessages(senderID, receiverID string) ([]models.Message, error)
+	// SaveMessage(senderID string, msg models.Message) error
+	// FetchMessages(senderID, receiverID string) ([]models.Message, error)
 }
 
 type StorageImpl struct {
@@ -24,6 +24,7 @@ func NewStorage(db *sql.DB) Storage {
 	return &StorageImpl{
 		db: db,
 	}
+
 }
 
 func (u *StorageImpl) FindUserByEmail(email string) (*models.UserLogin, error) {

@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    container_name: jwt-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1122
+      POSTGRES_DB: chat_app_go
+    ports:
+      - "5433:5432"
+    volumes:
+        - chat_app:/var/lib/postgresql/data  
+    networks:
+      - jwt-network
+
+  app:
+    build:
+      context: .
+      dockerfile: DockerFile
+    container_name: chatting-app
+    ports:
+      - "8002:8002"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: 1122
+      DB_NAME: chat_app_go
+    networks:
+      - jwt-network
+
+volumes:
+  chat_app:
+
+
+networks:
+  jwt-network:

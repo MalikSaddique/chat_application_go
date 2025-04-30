@@ -1,36 +1,46 @@
 package main
 
 import (
-	"log"
-
-	"github.com/MalikSaddique/chat_application_go/database"
-	"github.com/MalikSaddique/chat_application_go/routes"
-	authserviceimpl "github.com/MalikSaddique/chat_application_go/service/auth_service/auth_service_impl"
-	messageserviceimpl "github.com/MalikSaddique/chat_application_go/service/message_service/message_service_impl"
+	authserviceimpl "github.com/MalikSaddique/chat_application_go/controllers/auth_service/auth_service_impl"
+	messageserviceimpl "github.com/MalikSaddique/chat_application_go/controllers/message_service/message_service_impl"
+	"github.com/MalikSaddique/chat_application_go/db"
+	"github.com/MalikSaddique/chat_application_go/pkg/logger"
+	"github.com/MalikSaddique/chat_application_go/router"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
+var (
+	log = logger.Logger("ChatApp")
+)
+
 func main() {
+
+	log.Info("App started")
 
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatalf("Error loading .env file: %s", err)
 	}
 
-	conn, err := database.DbConnection()
+	connMongo, err := db.MongoDbConn()
 	if err != nil {
-		log.Fatalf("Database connection error: %s", err)
+		log.Fatalf("db connection error: %s", err)
+	}
+	conn, err := db.DbConnection()
+	if err != nil {
+		log.Fatalf("db connection error: %s", err)
 	}
 
-	userdb := database.NewStorage(conn)
+	userdb := db.NewStorage(conn)
+	messagedb := db.NewMongoDb(connMongo)
 
 	authService := authserviceimpl.NewAuthService(authserviceimpl.NewAuthServiceImpl{
 		UserAuth: userdb,
 	})
-	messageService := messageserviceimpl.NewMessageService(userdb)
+	messageService := messageserviceimpl.NewMessageService(messagedb)
 
-	router := routes.NewRouter(authService, messageService)
+	router := router.NewRouter(authService, messageService)
 
 	router.Engine.Run(":8002")
 
