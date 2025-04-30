@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/MalikSaddique/chat_application_go/models"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -45,26 +46,38 @@ func (u *MessageInterfaceImpl) SaveMessage(senderID string, msg models.Message) 
 }
 
 func (u *MessageInterfaceImpl) FetchMessages(senderID, receiverID string) ([]models.Message, error) {
-	query := `
-		SELECT sender_id, receiver_id, message, timestamp
-		FROM messages
-		WHERE (sender_id = $1 AND receiver_id = $2) OR (sender_id = $2 AND receiver_id = $1)
-		ORDER BY timestamp ASC
-	`
-	rows, err := u.db.Query(query, senderID, receiverID)
+	sid, err := strconv.ParseInt(senderID, 10, 64)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+
+	rid, err := strconv.ParseInt(receiverID, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{
+		"$or": []bson.M{
+			{"sender_id": sid, "receiver_id": rid},
+			{"sender_id": rid, "receiver_id": sid},
+		},
+	}
+
+	collection := u.mongoClient.Database("chat_app_go").Collection("messages")
+
+	cursor, err := collection.Find(context.TODO(), filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.TODO())
 
 	var messages []models.Message
-	for rows.Next() {
+	for cursor.Next(context.TODO()) {
 		var msg models.Message
-		err := rows.Scan(&msg.SenderID, &msg.ReceiverID, &msg.Message, &msg.Timestamp)
-		if err != nil {
+		if err := cursor.Decode(&msg); err != nil {
 			return nil, err
 		}
 		messages = append(messages, msg)
 	}
+
 	return messages, nil
 }
