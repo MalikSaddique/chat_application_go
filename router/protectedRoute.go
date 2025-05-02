@@ -29,15 +29,13 @@ func (r *Router) SendMessage(c *gin.Context) {
 }
 
 func (r *Router) GetMessages(c *gin.Context) {
-	senderID := c.MustGet("userID").(string)
-	receiverID := c.Query("receiver_id")
-
-	if receiverID == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "receiver_id is required"})
+	chatID := c.Query("chat_id")
+	if chatID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "chat_id is required"})
 		return
 	}
 
-	messages, err := r.MessageService.GetMessages(senderID, receiverID)
+	messages, err := r.MessageService.GetMessages(chatID)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get messages"})

@@ -4,5 +4,5 @@ import "github.com/MalikSaddique/chat_application_go/models"
 
 type MessageService interface {
 	SendMessage(senderID string, receiverID string, msg models.Message) error
-	GetMessages(senderID, receiverID string) ([]models.Message, error)
+	GetMessages(chatID string) ([]models.Message, error)
 }

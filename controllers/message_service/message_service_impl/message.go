@@ -12,6 +12,6 @@ func (m *MessageServiceImpl) SendMessage(senderID string, receiverID string, msg
 	return nil
 }
 
-func (m *MessageServiceImpl) GetMessages(senderID, receiverID string) ([]models.Message, error) {
-	return m.MessageAuth.FetchMessages(senderID, receiverID)
+func (m *MessageServiceImpl) GetMessages(chatID string) ([]models.Message, error) {
+	return m.MessageAuth.FetchMessages(chatID)
 }
