@@ -3,21 +3,23 @@ package router
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/MalikSaddique/chat_application_go/models"
 	"github.com/gin-gonic/gin"
 )
 
 func (r *Router) SendMessage(c *gin.Context) {
+	var msg models.Message
 	userID := c.MustGet("userID").(string)
 
-	var msg models.Message
 	if err := c.ShouldBindJSON(&msg); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
+	receiverID := strconv.FormatInt(msg.ReceiverID, 10)
 
-	err := r.MessageService.SendMessage(userID, msg)
+	err := r.MessageService.SendMessage(userID, receiverID, msg)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send message"})
 		return

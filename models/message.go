@@ -5,11 +5,10 @@ import (
 )
 
 type Message struct {
-	// ID         primitive.ObjectID `bson:"_id,omitempty"`
-	SenderID   int64     `bson:"sender_id"`
-	ReceiverID int64     `bson:"receiver_id"`
-	Message    string    `bson:"message"`
-	Timestamp  time.Time `bson:"timestamp"`
+	SenderID   int64     `json:"sender_id,omitempty" bson:"sender_id,omitempty"`
+	ReceiverID int64     `json:"receiver_id,omitempty" bson:"receiver_id,omitempty"`
+	Message    string    `json:"message" bson:"message"`
+	Timestamp  time.Time `json:"timestamp,omitempty" bson:"timestamp,omitempty"`
 }
 
 type SendMessageRequest struct {

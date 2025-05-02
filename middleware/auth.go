@@ -8,7 +8,8 @@ import (
 )
 
 var secretKey = []byte("secret-key")
-var refreshSecretKey = []byte("my_refresh_secret_key")
+
+// var refreshSecretKey = []byte("my_refresh_secret_key")
 
 func CreateToken(email string, id int) (string, error) {
 	fmt.Println("User_id", id)
@@ -16,7 +17,7 @@ func CreateToken(email string, id int) (string, error) {
 		jwt.MapClaims{
 			"email":   email,
 			"user_id": id,
-			"exp":     time.Now().Add(time.Minute * 5).Unix(),
+			"exp":     time.Now().Add(time.Minute * 30).Unix(),
 		})
 
 	tokenString, err := token.SignedString(secretKey)

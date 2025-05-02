@@ -4,8 +4,8 @@ import (
 	"github.com/MalikSaddique/chat_application_go/models"
 )
 
-func (m *MessageServiceImpl) SendMessage(senderID string, msg models.Message) error {
-	err := m.MessageAuth.SaveMessage(senderID, msg)
+func (m *MessageServiceImpl) SendMessage(senderID string, receiverID string, msg models.Message) error {
+	err := m.MessageAuth.SaveMessage(senderID, receiverID, msg)
 	if err != nil {
 		return err
 	}

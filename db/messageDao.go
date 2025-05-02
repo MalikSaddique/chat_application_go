@@ -11,7 +11,7 @@ import (
 )
 
 type MessageInterface interface {
-	SaveMessage(senderID string, msg models.Message) error
+	SaveMessage(senderID string, receiverID string, msg models.Message) error
 	FetchMessages(senderID, receiverID string) ([]models.Message, error)
 }
 
@@ -26,15 +26,16 @@ func NewMongoDb(client *mongo.Client) MessageInterface {
 
 }
 
-func (u *MessageInterfaceImpl) SaveMessage(senderID string, msg models.Message) error {
+func (u *MessageInterfaceImpl) SaveMessage(senderID string, receiverID string, msg models.Message) error {
 	sid, err := strconv.ParseInt(senderID, 10, 64)
+	rid, err := strconv.ParseInt(receiverID, 10, 64)
 	if err != nil {
 		return err
 	}
 
 	message := models.Message{
 		SenderID:   sid,
-		ReceiverID: msg.ReceiverID,
+		ReceiverID: rid,
 		Message:    msg.Message,
 		Timestamp:  time.Now(),
 	}
