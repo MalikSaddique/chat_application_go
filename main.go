@@ -3,7 +3,8 @@ package main
 import (
 	authserviceimpl "github.com/MalikSaddique/chat_application_go/controllers/auth_service/auth_service_impl"
 	messageserviceimpl "github.com/MalikSaddique/chat_application_go/controllers/message_service/message_service_impl"
-	"github.com/MalikSaddique/chat_application_go/db"
+	mongodb "github.com/MalikSaddique/chat_application_go/db/mongoDB"
+	db "github.com/MalikSaddique/chat_application_go/db/postgresDB"
 	"github.com/MalikSaddique/chat_application_go/pkg/logger"
 	"github.com/MalikSaddique/chat_application_go/router"
 	"github.com/joho/godotenv"
@@ -23,7 +24,7 @@ func main() {
 		log.Fatalf("Error loading .env file: %s", err)
 	}
 
-	connMongo, err := db.MongoDbConn()
+	connMongo, err := mongodb.MongoDbConn()
 	if err != nil {
 		log.Fatalf("db connection error: %s", err)
 	}
@@ -33,7 +34,7 @@ func main() {
 	}
 
 	userdb := db.NewStorage(conn)
-	messagedb := db.NewMongoDb(connMongo)
+	messagedb := mongodb.NewMongoDb(connMongo)
 
 	authService := authserviceimpl.NewAuthService(authserviceimpl.NewAuthServiceImpl{
 		UserAuth: userdb,

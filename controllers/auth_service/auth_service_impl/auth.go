@@ -37,11 +37,12 @@ func (u *AuthServiceImpl) SignUp(c *gin.Context, req *models.UserSignUp) *models
 func (u *AuthServiceImpl) Login(c *gin.Context, req *models.UserLogin) (*models.TokenPair, error) {
 
 	user, err := u.userAuth.FindUserByEmail(req.Email)
+
 	if err != nil {
 		return nil, errors.New("User not found")
 	}
 
-	if user.Password != req.Password {
+	if user.Password != req.Password || user.Email != req.Email {
 		return nil, errors.New("Invalid credentials")
 	}
 

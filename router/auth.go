@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/MalikSaddique/chat_application_go/models"
+	"github.com/MalikSaddique/chat_application_go/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,12 +18,14 @@ import (
 // @Success      200
 // @Failure      401
 // @Router       /login [post]
+
 func (r *Router) Login(c *gin.Context) {
 	var req models.UserLoginReq
 	var login models.UserLogin
+	help := utils.DecryptErrors
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": help(err)})
 		return
 	}
 
@@ -52,13 +55,13 @@ func (r *Router) Login(c *gin.Context) {
 // @Router       /signup [post]
 func (r *Router) SignUp(c *gin.Context) {
 	var req *models.UserSignUp
+	help := utils.DecryptErrors
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": help(err)})
 		return
 	}
 
 	signup := models.UserSignUp{
-		// Id:       req.Id,
 		Email:    req.Email,
 		Password: req.Password,
 	}

@@ -2,14 +2,15 @@ package messageserviceimpl
 
 import (
 	messageservice "github.com/MalikSaddique/chat_application_go/controllers/message_service"
-	"github.com/MalikSaddique/chat_application_go/db"
+	mongodb "github.com/MalikSaddique/chat_application_go/db/mongoDB"
+	db "github.com/MalikSaddique/chat_application_go/db/postgresDB"
 )
 
 type MessageServiceImpl struct {
-	MessageAuth db.MessageInterface
+	MessageAuth mongodb.MessageInterface
 }
 
-func NewMessageService(input db.MessageInterface) messageservice.MessageService {
+func NewMessageService(input mongodb.MessageInterface) messageservice.MessageService {
 	return &MessageServiceImpl{
 		MessageAuth: input,
 	}

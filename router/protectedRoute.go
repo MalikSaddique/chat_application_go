@@ -47,3 +47,35 @@ func (r *Router) GetMessages(c *gin.Context) {
 		"messages": messages,
 	})
 }
+
+func (r *Router) UpdateMessage(c *gin.Context) {
+	msgID := c.Param("_id")
+
+	var msg models.Message
+	if err := c.ShouldBindJSON(&msg); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+
+	updatedMsg, err := r.MessageService.UpdateMessage(c, msgID, &msg)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update message"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"Message Updated Successfully": updatedMsg,
+	})
+}
+
+func (r *Router) DeleteMessage(c *gin.Context) {
+	msgID := c.Param("_id")
+
+	err := r.MessageService.DeleteMessage(c, msgID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete message"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Message deleted successfully"})
+}

@@ -2,7 +2,7 @@ package authserviceimpl
 
 import (
 	authservice "github.com/MalikSaddique/chat_application_go/controllers/auth_service"
-	"github.com/MalikSaddique/chat_application_go/db"
+	db "github.com/MalikSaddique/chat_application_go/db/postgresDB"
 )
 
 type AuthServiceImpl struct {

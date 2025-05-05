@@ -1,4 +1,4 @@
-package db
+package mongodb
 
 import (
 	"context"
@@ -9,26 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-type MessageInterface interface {
-	SaveMessage(senderID string, receiverID string, msg models.Message) error
-	FetchMessages(senderID string, receiverID string, offset int, limit int) ([]models.Message, error)
-}
-
-type MessageInterfaceImpl struct {
-	mongoClient *mongo.Client
-}
-
-func NewMongoDb(client *mongo.Client) MessageInterface {
-	return &MessageInterfaceImpl{
-		mongoClient: client,
-	}
-
-}
-
-var _ MessageInterface = &MessageInterfaceImpl{}
 
 func (u *MessageInterfaceImpl) SaveMessage(senderID string, receiverID string, msg models.Message) error {
 	sid, err := strconv.ParseInt(senderID, 10, 64)
@@ -102,45 +83,4 @@ func (u *MessageInterfaceImpl) SaveMessage(senderID string, receiverID string, m
 
 	_, err = messageCollection.InsertOne(c, message)
 	return err
-}
-
-func (u *MessageInterfaceImpl) FetchMessages(senderIDStr string, receiverIDStr string, skip int, limit int) ([]models.Message, error) {
-	filter := bson.M{}
-
-	if senderIDStr != "" {
-		senderID, err := strconv.Atoi(senderIDStr)
-		if err == nil {
-			filter["sender_id"] = senderID
-		}
-	}
-
-	if receiverIDStr != "" {
-		receiverID, err := strconv.Atoi(receiverIDStr)
-		if err == nil {
-			filter["receiver_id"] = receiverID
-		}
-	}
-
-	messageCollection := u.mongoClient.Database("chat_app_go").Collection("messages")
-	findOptions := options.Find()
-	findOptions.SetLimit(int64(limit))
-	findOptions.SetSkip(int64(skip))
-	findOptions.SetSort(bson.D{{"timestamp", -1}})
-
-	cursor, err := messageCollection.Find(context.TODO(), filter, findOptions)
-	if err != nil {
-		return nil, err
-	}
-	defer cursor.Close(context.TODO())
-
-	var messages []models.Message
-	for cursor.Next(context.TODO()) {
-		var msg models.Message
-		if err := cursor.Decode(&msg); err != nil {
-			return nil, err
-		}
-		messages = append(messages, msg)
-	}
-
-	return messages, nil
 }

@@ -2,7 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 
 	"github.com/MalikSaddique/chat_application_go/models"
@@ -12,8 +11,6 @@ import (
 type Storage interface {
 	FindUserByEmail(email string) (*models.UserLogin, error)
 	SignUp(c *gin.Context, req *models.UserSignUp) *models.UserSignUp
-	// SaveMessage(senderID string, msg models.Message) error
-	// FetchMessages(senderID, receiverID string) ([]models.Message, error)
 }
 
 type StorageImpl struct {
@@ -28,8 +25,6 @@ func NewStorage(db *sql.DB) Storage {
 }
 
 func (u *StorageImpl) FindUserByEmail(email string) (*models.UserLogin, error) {
-	fmt.Println(59)
-
 	var user models.UserLogin
 
 	err := u.db.QueryRow("SELECT id,  email, password FROM users WHERE email=$1", email).Scan(&user.Id, &user.Email, &user.Password)
