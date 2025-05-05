@@ -9,11 +9,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type MessageInterface interface {
 	SaveMessage(senderID string, receiverID string, msg models.Message) error
-	FetchMessages(chatID string) ([]models.Message, error)
+	FetchMessages(senderID string, receiverID string, offset int, limit int) ([]models.Message, error)
 }
 
 type MessageInterfaceImpl struct {
@@ -26,6 +27,8 @@ func NewMongoDb(client *mongo.Client) MessageInterface {
 	}
 
 }
+
+var _ MessageInterface = &MessageInterfaceImpl{}
 
 func (u *MessageInterfaceImpl) SaveMessage(senderID string, receiverID string, msg models.Message) error {
 	sid, err := strconv.ParseInt(senderID, 10, 64)
@@ -45,7 +48,7 @@ func (u *MessageInterfaceImpl) SaveMessage(senderID string, receiverID string, m
 
 	var conversationID int64
 
-	if msg.ChatId == 0 {
+	if msg.ReceiverID == 0 {
 
 		participants := models.Participants{
 			SenderID:   sid,
@@ -81,7 +84,7 @@ func (u *MessageInterfaceImpl) SaveMessage(senderID string, receiverID string, m
 			}
 		}
 	} else {
-		conversationID = msg.ChatId
+		conversationID = msg.ReceiverID
 		_, err := convoCollection.UpdateOne(c, bson.M{"chat_id": conversationID}, bson.M{
 			"$set": bson.M{"last_message": msg.Message, "last_updated": time.Now()},
 		})
@@ -91,7 +94,6 @@ func (u *MessageInterfaceImpl) SaveMessage(senderID string, receiverID string, m
 	}
 
 	message := models.Message{
-		ChatId:     conversationID,
 		SenderID:   sid,
 		ReceiverID: rid,
 		Message:    msg.Message,
@@ -102,16 +104,30 @@ func (u *MessageInterfaceImpl) SaveMessage(senderID string, receiverID string, m
 	return err
 }
 
-func (u *MessageInterfaceImpl) FetchMessages(chatID string) ([]models.Message, error) {
-	cid, err := strconv.ParseInt(chatID, 10, 64)
-	if err != nil {
-		return nil, err
+func (u *MessageInterfaceImpl) FetchMessages(senderIDStr string, receiverIDStr string, skip int, limit int) ([]models.Message, error) {
+	filter := bson.M{}
+
+	if senderIDStr != "" {
+		senderID, err := strconv.Atoi(senderIDStr)
+		if err == nil {
+			filter["sender_id"] = senderID
+		}
+	}
+
+	if receiverIDStr != "" {
+		receiverID, err := strconv.Atoi(receiverIDStr)
+		if err == nil {
+			filter["receiver_id"] = receiverID
+		}
 	}
 
 	messageCollection := u.mongoClient.Database("chat_app_go").Collection("messages")
-	filter := bson.M{"chat_id": cid}
+	findOptions := options.Find()
+	findOptions.SetLimit(int64(limit))
+	findOptions.SetSkip(int64(skip))
+	findOptions.SetSort(bson.D{{"timestamp", -1}})
 
-	cursor, err := messageCollection.Find(context.TODO(), filter)
+	cursor, err := messageCollection.Find(context.TODO(), filter, findOptions)
 	if err != nil {
 		return nil, err
 	}

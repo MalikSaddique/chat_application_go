@@ -29,18 +29,21 @@ func (r *Router) SendMessage(c *gin.Context) {
 }
 
 func (r *Router) GetMessages(c *gin.Context) {
-	chatID := c.Query("chat_id")
-	if chatID == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "chat_id is required"})
-		return
-	}
+	senderIDStr := c.Query("sender_id")
+	receiverIDStr := c.Query("receiver_id")
+	pageStr := c.DefaultQuery("page", "1")
+	limitStr := c.DefaultQuery("limit", "10")
 
-	messages, err := r.MessageService.GetMessages(chatID)
+	messages, err := r.MessageService.GetMessages(senderIDStr, receiverIDStr, pageStr, limitStr)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get messages"})
 		return
 	}
 
-	c.JSON(http.StatusOK, messages)
+	c.JSON(http.StatusOK, gin.H{
+		"page":     pageStr,
+		"limit":    limitStr,
+		"messages": messages,
+	})
 }

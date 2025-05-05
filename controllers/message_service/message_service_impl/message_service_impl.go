@@ -18,3 +18,5 @@ func NewMessageService(input db.MessageInterface) messageservice.MessageService 
 type NewMessageServiceImpl struct {
 	UserAuth db.Storage
 }
+
+var _ messageservice.MessageService = &MessageServiceImpl{}

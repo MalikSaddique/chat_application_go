@@ -8,7 +8,6 @@ import (
 
 type Message struct {
 	ID         primitive.ObjectID `bson:"_id,omitempty"`
-	ChatId     int64              `json:"chat_id,omitempty" bson:"chat_id,omitempty"`
 	SenderID   int64              `json:"sender_id,omitempty" bson:"sender_id,omitempty"`
 	ReceiverID int64              `json:"receiver_id,omitempty" bson:"receiver_id,omitempty"`
 	Message    string             `json:"message" bson:"message"`

@@ -18,3 +18,5 @@ func NewAuthService(input NewAuthServiceImpl) authservice.AuthService {
 type NewAuthServiceImpl struct {
 	UserAuth db.Storage
 }
+
+var _ authservice.AuthService = &AuthServiceImpl{}
