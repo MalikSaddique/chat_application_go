@@ -31,7 +31,6 @@ func (u *MessageInterfaceImpl) FetchMessages(senderIDStr, receiverIDStr string, 
 	findOptions := options.Find()
 	findOptions.SetLimit(int64(limit))
 	findOptions.SetSkip(int64(skip))
-	findOptions.SetSort(bson.D{{"timestamp", -1}})
 
 	cursor, err := messageCollection.Find(context.TODO(), filter, findOptions)
 	if err != nil {
