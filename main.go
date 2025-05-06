@@ -43,6 +43,6 @@ func main() {
 
 	router := router.NewRouter(authService, messageService)
 
-	router.Engine.Run(":8002")
+	router.Engine.Run(":8003")
 
 }

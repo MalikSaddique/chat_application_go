@@ -2,7 +2,6 @@ package mongodb
 
 import (
 	"context"
-	"strconv"
 	"time"
 
 	"github.com/MalikSaddique/chat_application_go/models"
@@ -11,17 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func (u *MessageInterfaceImpl) SaveMessage(senderID string, receiverID string, msg models.Message) error {
-	sid, err := strconv.ParseInt(senderID, 10, 64)
-	if err != nil {
-		return err
-	}
-
-	rid, err := strconv.ParseInt(receiverID, 10, 64)
-	if err != nil {
-		return err
-	}
-
+func (u *MessageInterfaceImpl) SaveMessage(senderID, receiverID int64, msg models.Message) error {
 	c := context.TODO()
 	db := u.mongoClient.Database("chat_app_go")
 	convoCollection := db.Collection("conversations")
@@ -32,12 +21,12 @@ func (u *MessageInterfaceImpl) SaveMessage(senderID string, receiverID string, m
 	if msg.ReceiverID == 0 {
 
 		participants := models.Participants{
-			SenderID:   sid,
-			ReceiverID: rid,
+			SenderID:   senderID,
+			ReceiverID: receiverID,
 		}
 
 		var conversation models.Conversation
-		err = convoCollection.FindOne(c, bson.M{"participants": participants}).Decode(&conversation)
+		err := convoCollection.FindOne(c, bson.M{"participants": participants}).Decode(&conversation)
 
 		if err == mongo.ErrNoDocuments {
 			newConvo := models.Conversation{
@@ -75,12 +64,12 @@ func (u *MessageInterfaceImpl) SaveMessage(senderID string, receiverID string, m
 	}
 
 	message := models.Message{
-		SenderID:   sid,
-		ReceiverID: rid,
+		SenderID:   senderID,
+		ReceiverID: receiverID,
 		Message:    msg.Message,
 		Timestamp:  time.Now(),
 	}
 
-	_, err = messageCollection.InsertOne(c, message)
+	_, err := messageCollection.InsertOne(c, message)
 	return err
 }

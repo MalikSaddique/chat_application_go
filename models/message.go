@@ -15,7 +15,7 @@ type Message struct {
 }
 
 type SendMessageRequest struct {
-	ReceiverID string `bson:"receiver_id"`
+	ReceiverID int64  `bson:"receiver_id"`
 	Message    string `bson:"message"`
 }
 

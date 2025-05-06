@@ -19,7 +19,8 @@ func DbConnection() (*sql.DB, error) {
 
 	port, err := strconv.Atoi(portStr)
 	if err != nil {
-		return nil, fmt.Errorf("error converting port to integer: %v", err)
+		log.Infof("error converting port to integer: %v", err)
+		return nil, err
 	}
 
 	dsn := fmt.Sprintf(
@@ -29,14 +30,16 @@ func DbConnection() (*sql.DB, error) {
 
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to database: %v", err)
+		log.Errorf("failed to connect to database: %v", err)
+		return nil, err
 	}
 
 	if err := db.Ping(); err != nil {
 		db.Close()
-		return nil, fmt.Errorf("database ping failed: %v", err)
+		log.Errorf("database ping failed: %v", err)
+		return nil, err
 	}
 
-	fmt.Println("Connected to PostgreSQL with database/sql!")
+	log.Info("Connected to PostgreSQL with database/sql!")
 	return db, nil
 }

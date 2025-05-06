@@ -24,12 +24,14 @@ services:
       - "8002:8002"
     depends_on:
       - db
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: 1122
-      DB_NAME: chat_app_go
+    env_file:
+      - .env
+    # environment:
+    #   DB_HOST: db
+    #   DB_PORT: 5432
+    #   DB_USER: postgres
+    #   DB_PASSWORD: 1122
+    #   DB_NAME: chat_app_go
     networks:
       - jwt-network
 

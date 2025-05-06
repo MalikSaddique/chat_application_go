@@ -9,8 +9,8 @@ import (
 )
 
 type MessageInterface interface {
-	SaveMessage(senderID string, receiverID string, msg models.Message) error
-	FetchMessages(senderID string, receiverID string, offset int, limit int) ([]models.Message, error)
+	SaveMessage(senderID int64, receiverID int64, msg models.Message) error
+	FetchMessages(senderID, receiverID int64, skip, limit int) ([]models.Message, error)
 	UpdateMessageDB(c context.Context, id primitive.ObjectID, updatedMsg *models.Message) error
 	DeleteMessageDB(c context.Context, id primitive.ObjectID) error
 }

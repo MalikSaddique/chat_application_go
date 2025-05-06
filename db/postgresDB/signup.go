@@ -8,34 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Storage interface {
-	FindUserByEmail(email string) (*models.UserLogin, error)
-	SignUp(c *gin.Context, req *models.UserSignUp) *models.UserSignUp
-}
-
-type StorageImpl struct {
-	db *sql.DB
-}
-
-func NewStorage(db *sql.DB) Storage {
-	return &StorageImpl{
-		db: db,
-	}
-
-}
-
-func (u *StorageImpl) FindUserByEmail(email string) (*models.UserLogin, error) {
-	var user models.UserLogin
-
-	err := u.db.QueryRow("SELECT id,  email, password FROM users WHERE email=$1", email).Scan(&user.Id, &user.Email, &user.Password)
-	if err != nil {
-		return nil, err
-	}
-
-	return &user, nil
-
-}
-
 func (u *StorageImpl) SignUp(c *gin.Context, req *models.UserSignUp) *models.UserSignUp {
 
 	err := u.db.QueryRow("SELECT email FROM users WHERE email = $1", &req.Email).Scan(&req.Email)

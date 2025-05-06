@@ -3,11 +3,15 @@ package mongodb
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 
+	"github.com/MalikSaddique/chat_application_go/pkg/logger"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+)
+
+var (
+	log = logger.Logger("Mongo-DB")
 )
 
 func MongoDbConn() (*mongo.Client, error) {
@@ -20,7 +24,7 @@ func MongoDbConn() (*mongo.Client, error) {
 		return nil, fmt.Errorf("database ping failed: %v", err)
 	}
 
-	fmt.Println("Connected to MongoDB with database/mongoDB!")
+	log.Info("Connected to MongoDB with database/mongoDB!")
 
 	return client, err
 }
