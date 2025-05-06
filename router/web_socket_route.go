@@ -14,16 +14,18 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-func (r *Router) ConnectionUpgrade(c *gin.Context) error {
+func (r *Router) ConnectionUpgrade(c *gin.Context) {
 	userID := c.Query("userID")
 
 	wsConn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Println("WebSocket Upgrade failed:", err)
-		return err
+		return
 	}
-	err, _ = r.WebSocketSvc.AddConn(userID, wsConn)
 
-	return err
-
+	err = r.WebSocketSvc.AddConn(userID, wsConn)
+	if err != nil {
+		log.Println("Error in AddConn:", err)
+		return
+	}
 }

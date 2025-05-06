@@ -7,12 +7,10 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var upgrader = websocket.Upgrader{}
-
 var connMap = make(map[string]*websocket.Conn)
 var connLock = sync.Mutex{}
 
-func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn) {
+func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn) error {
 	connLock.Lock()
 	connMap[userID] = wsConn
 	connLock.Unlock()
@@ -32,4 +30,5 @@ func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn) {
 			break
 		}
 	}
+	return nil
 }
