@@ -15,7 +15,9 @@ var upgrader = websocket.Upgrader{
 }
 
 func (r *Router) ConnectionUpgrade(c *gin.Context) {
-	userID := c.Query("userID")
+	userID := c.MustGet("userID").(string)
+
+	log.Println("Route userid", userID)
 
 	wsConn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
@@ -23,7 +25,7 @@ func (r *Router) ConnectionUpgrade(c *gin.Context) {
 		return
 	}
 
-	err = r.WebSocketSvc.AddConn(userID, wsConn)
+	err = r.WebSocketSvc.AddConn(userID, wsConn, c)
 	if err != nil {
 		log.Println("Error in AddConn:", err)
 		return

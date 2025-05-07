@@ -11,12 +11,8 @@ import (
 
 func (u *MessageInterfaceImpl) FetchMessages(senderID, receiverID int64, skip, limit int) ([]models.Message, error) {
 	filter := bson.M{}
-	// if err := nil {
 	filter["sender_id"] = senderID
-	// }
-	// if err == nil {
 	filter["receiver_id"] = receiverID
-	// }
 
 	messageCollection := u.mongoClient.Database("chat_app_go").Collection("messages")
 	findOptions := options.Find()

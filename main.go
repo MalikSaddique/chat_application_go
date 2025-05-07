@@ -7,6 +7,7 @@ import (
 	db "github.com/MalikSaddique/chat_application_go/db/postgresDB"
 	"github.com/MalikSaddique/chat_application_go/pkg/logger"
 	"github.com/MalikSaddique/chat_application_go/router"
+	websocketsimpl "github.com/MalikSaddique/chat_application_go/web_sockets/web_sockets_impl"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
@@ -40,8 +41,9 @@ func main() {
 		UserAuth: userdb,
 	})
 	messageService := messageserviceimpl.NewMessageService(messagedb)
+	webSockets := websocketsimpl.NewWebSockets(messagedb)
 
-	router := router.NewRouter(authService, messageService)
+	router := router.NewRouter(authService, messageService, webSockets)
 
 	router.Engine.Run(":8003")
 

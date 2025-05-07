@@ -1,7 +1,12 @@
 package websockets
 
-import "github.com/gorilla/websocket"
+import (
+	"github.com/MalikSaddique/chat_application_go/models"
+	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
+)
 
 type WebSockets interface {
-	AddConn(userID string, wsConn *websocket.Conn) error
+	AddConn(userID string, wsConn *websocket.Conn, c *gin.Context) error
+	SendMessage(c *gin.Context, msg models.Message)
 }

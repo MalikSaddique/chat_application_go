@@ -20,6 +20,5 @@ func (r *Router) defineRoutes() {
 		protected.GET("/update/:_id", r.UpdateMessage)
 		protected.GET("/delete/:_id", r.DeleteMessage)
 		protected.GET("/ws", r.ConnectionUpgrade)
-
 	}
 }

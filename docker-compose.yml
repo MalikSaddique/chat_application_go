@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres:13
-    container_name: jwt-postgres
+    container_name: chat-app-postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1122
@@ -11,7 +11,17 @@ services:
     ports:
       - "5433:5432"
     volumes:
-        - chat_app:/var/lib/postgresql/data  
+      - pg_data:/var/lib/postgresql/data  
+    networks:
+      - jwt-network
+
+  mongoDb:
+    image: mongo:6
+    container_name: chat-app-mongoDb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db  
     networks:
       - jwt-network
 
@@ -24,20 +34,15 @@ services:
       - "8002:8002"
     depends_on:
       - db
+      - mongoDb
     env_file:
       - .env
-    # environment:
-    #   DB_HOST: db
-    #   DB_PORT: 5432
-    #   DB_USER: postgres
-    #   DB_PASSWORD: 1122
-    #   DB_NAME: chat_app_go
     networks:
       - jwt-network
 
 volumes:
-  chat_app:
-
+  pg_data:
+  mongo_data:
 
 networks:
   jwt-network:

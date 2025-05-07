@@ -4,12 +4,13 @@ import (
 	"context"
 
 	"github.com/MalikSaddique/chat_application_go/models"
+	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type MessageInterface interface {
-	SaveMessage(senderID int64, receiverID int64, msg models.Message) error
+	SaveMessage(c *gin.Context, msg models.Message) error
 	FetchMessages(senderID, receiverID int64, skip, limit int) ([]models.Message, error)
 	UpdateMessageDB(c context.Context, id primitive.ObjectID, updatedMsg *models.Message) error
 	DeleteMessageDB(c context.Context, id primitive.ObjectID) error

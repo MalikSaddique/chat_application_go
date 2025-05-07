@@ -1,17 +1,16 @@
 package mongodb
 
 import (
-	"context"
 	"time"
 
 	"github.com/MalikSaddique/chat_application_go/models"
+	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func (u *MessageInterfaceImpl) SaveMessage(senderID, receiverID int64, msg models.Message) error {
-	c := context.TODO()
+func (u *MessageInterfaceImpl) SaveMessage(c *gin.Context, msg models.Message) error {
 	db := u.mongoClient.Database("chat_app_go")
 	convoCollection := db.Collection("conversations")
 	messageCollection := db.Collection("messages")
@@ -21,8 +20,8 @@ func (u *MessageInterfaceImpl) SaveMessage(senderID, receiverID int64, msg model
 	if msg.ReceiverID == 0 {
 
 		participants := models.Participants{
-			SenderID:   senderID,
-			ReceiverID: receiverID,
+			SenderID:   msg.SenderID,
+			ReceiverID: msg.ReceiverID,
 		}
 
 		var conversation models.Conversation
@@ -64,11 +63,12 @@ func (u *MessageInterfaceImpl) SaveMessage(senderID, receiverID int64, msg model
 	}
 
 	message := models.Message{
-		SenderID:   senderID,
-		ReceiverID: receiverID,
+		SenderID:   msg.SenderID,
+		ReceiverID: msg.ReceiverID,
 		Message:    msg.Message,
 		Timestamp:  time.Now(),
 	}
+	log.Infof("Message", message)
 
 	_, err := messageCollection.InsertOne(c, message)
 	return err
