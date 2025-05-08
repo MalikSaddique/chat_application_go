@@ -2,7 +2,6 @@ package mongodb
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/MalikSaddique/chat_application_go/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -33,7 +32,6 @@ func (u *MessageInterfaceImpl) FetchMessages(senderID, receiverID int64, skip, l
 		}
 		messages = append(messages, msg)
 	}
-	fmt.Println(messages)
 
 	return messages, nil
 }

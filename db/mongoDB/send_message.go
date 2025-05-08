@@ -61,14 +61,13 @@ func (u *MessageInterfaceImpl) SaveMessage(c *gin.Context, msg models.Message) e
 			return err
 		}
 	}
-
+	// msg.Delivered = false
 	message := models.Message{
 		SenderID:   msg.SenderID,
 		ReceiverID: msg.ReceiverID,
 		Message:    msg.Message,
 		Timestamp:  time.Now(),
 	}
-	log.Infof("Message", message)
 
 	_, err := messageCollection.InsertOne(c, message)
 	return err

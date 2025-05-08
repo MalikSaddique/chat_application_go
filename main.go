@@ -40,8 +40,9 @@ func main() {
 	authService := authserviceimpl.NewAuthService(authserviceimpl.NewAuthServiceImpl{
 		UserAuth: userdb,
 	})
+
 	messageService := messageserviceimpl.NewMessageService(messagedb)
-	webSockets := websocketsimpl.NewWebSockets(messagedb)
+	webSockets := websocketsimpl.NewWebSockets(messagedb, messageService)
 
 	router := router.NewRouter(authService, messageService, webSockets)
 

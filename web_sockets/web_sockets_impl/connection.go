@@ -11,40 +11,49 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var connMap = make(map[string]*websocket.Conn)
-var connLock = sync.Mutex{}
+var ConnMap = make(map[string]*websocket.Conn)
+var ConnLock = sync.Mutex{}
 
 func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn, c *gin.Context) error {
-	connLock.Lock()
-	connMap[userID] = wsConn
-	connLock.Unlock()
+	ConnLock.Lock()
+	ConnMap[userID] = wsConn
+	ConnLock.Unlock()
 
 	log.Println("User connected:", userID)
+
+	userIDstr, err := strconv.Atoi(userID)
+	if err != nil {
+		log.Println("Error: ", err)
+	}
+
+	pendingMessages, err := w.MessageService.GetUndeliveredMessages(int64(userIDstr))
+	if err == nil {
+		for _, m := range pendingMessages {
+			msgResp := models.MessageResponse{
+				SenderID:   m.SenderID,
+				ReceiverID: m.ReceiverID,
+				Message:    m.Message,
+				Timestamp:  m.Timestamp,
+			}
+
+			msgBytes, _ := json.Marshal(msgResp)
+			wsConn.WriteMessage(websocket.TextMessage, msgBytes)
+		}
+	}
 	defer func() {
-		connLock.Lock()
-		delete(connMap, userID)
-		connLock.Unlock()
+		ConnLock.Lock()
+		delete(ConnMap, userID)
+		ConnLock.Unlock()
 		wsConn.Close()
 		log.Println("User disconnected:", userID)
 	}()
 
 	for {
-		_, msgBytes, err := wsConn.ReadMessage()
+		_, _, err := wsConn.ReadMessage()
 		if err != nil {
 			log.Println("Error reading message:", err)
 			break
 		}
-
-		var msg models.Message
-		if err := json.Unmarshal(msgBytes, &msg); err != nil {
-			log.Println("Invalid message format:", err)
-			continue
-		}
-
-		log.Printf("Message received from user %s to user %d: %s", userID, msg.ReceiverID, msg.Message)
-		intUserID, _ := strconv.Atoi(userID)
-		msg.SenderID = int64(intUserID)
-		w.SendMessage(c, msg)
 	}
 
 	return nil
