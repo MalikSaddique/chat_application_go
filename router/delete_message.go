@@ -11,7 +11,7 @@ func (r *Router) DeleteMessage(c *gin.Context) {
 
 	err := r.MessageService.DeleteMessage(c, msgID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete message"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 

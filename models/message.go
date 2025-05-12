@@ -11,7 +11,6 @@ type Message struct {
 	SenderID   int64              `json:"sender_id,omitempty" bson:"sender_id,omitempty"`
 	ReceiverID int64              `json:"receiver_id,omitempty" bson:"receiver_id,omitempty"`
 	Message    string             `json:"message" bson:"message"`
-	Delivered  bool               `json:"-" bson:"delivered"`
 	Timestamp  time.Time          `json:"timestamp,omitempty" bson:"timestamp,omitempty"`
 }
 
@@ -20,6 +19,11 @@ type MessageResponse struct {
 	SenderID   int64     `json:"sender_id,omitempty" bson:"sender_id,omitempty"`
 	Message    string    `json:"message" bson:"message"`
 	Timestamp  time.Time `json:"timestamp,omitempty" bson:"timestamp,omitempty"`
+}
+
+type DeleteMessage struct {
+	MessageID primitive.ObjectID `json:"_id"`
+	Action    string             `json:"action"`
 }
 
 type SendMessageRequest struct {

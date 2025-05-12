@@ -19,6 +19,15 @@ func (r *Router) defineRoutes() {
 		protected.GET("/message", r.GetMessages)
 		protected.GET("/update/:_id", r.UpdateMessage)
 		protected.GET("/delete/:_id", r.DeleteMessage)
-		protected.GET("/ws", r.ConnectionUpgrade)
+		// protected.GET("/ws", r.StartWebSocketServer)
+	}
+
+}
+
+func (r *Router) defineWebSocketRouter() {
+	protected := r.Engine.Group("/protected")
+	protected.Use(middleware.AuthMiddleware())
+	{
+		protected.GET("/ws", r.StartWebSocketServer)
 	}
 }

@@ -14,7 +14,6 @@ type MessageInterface interface {
 	FetchMessages(senderID, receiverID int64, skip, limit int) ([]models.Message, error)
 	UpdateMessageDB(c context.Context, id primitive.ObjectID, updatedMsg *models.Message) error
 	DeleteMessageDB(c context.Context, id primitive.ObjectID) error
-	FetchUndeliveredMessages(receiverID int64) ([]models.Message, error)
 }
 
 type MessageInterfaceImpl struct {

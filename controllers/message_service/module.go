@@ -10,5 +10,4 @@ type MessageService interface {
 	GetMessages(senderID, receiverID int64, pageStr string, limitStr string) ([]models.Message, error)
 	UpdateMessage(c *gin.Context, idStr string, updatedMsg *models.Message) (*models.Message, error)
 	DeleteMessage(c *gin.Context, idStr string) error
-	GetUndeliveredMessages(receiverID int64) ([]models.Message, error)
 }

@@ -6,9 +6,11 @@ import (
 )
 
 func (m *MessageServiceImpl) SendMessage(c *gin.Context, msg models.Message) error {
+
 	err := m.MessageAuth.SaveMessage(c, msg)
 	if err != nil {
 		return err
 	}
+	m.WebSocket.SendMessage(&msg)
 	return nil
 }

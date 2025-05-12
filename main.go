@@ -12,13 +12,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var (
-	log = logger.Logger("ChatApp")
-)
+var log = logger.Logger("ChatApp")
 
 func main() {
-
-	log.Info("App started")
+	log.Infof("App started")
 
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -27,13 +24,12 @@ func main() {
 
 	connMongo, err := mongodb.MongoDbConn()
 	if err != nil {
-		log.Fatalf("db connection error: %s", err)
+		log.Fatalf("MongoDB connection error: %s", err)
 	}
 	conn, err := db.DbConnection()
 	if err != nil {
-		log.Fatalf("db connection error: %s", err)
+		log.Fatalf("PostgreSQL connection error: %s", err)
 	}
-
 	userdb := db.NewStorage(conn)
 	messagedb := mongodb.NewMongoDb(connMongo)
 
@@ -41,11 +37,19 @@ func main() {
 		UserAuth: userdb,
 	})
 
-	messageService := messageserviceimpl.NewMessageService(messagedb)
-	webSockets := websocketsimpl.NewWebSockets(messagedb, messageService)
+	webSockets := websocketsimpl.NewWebSockets(messagedb)
+	messageService := messageserviceimpl.NewMessageService(messagedb, webSockets)
 
-	router := router.NewRouter(authService, messageService, webSockets)
+	httpRouter := router.NewRouter(authService, messageService, webSockets, false)
+	go func() {
+		if err := httpRouter.Engine.Run(":8003"); err != nil {
+			log.Fatalf("HTTP server failed to start: %s", err)
+		}
+	}()
 
-	router.Engine.Run(":8003")
-
+	webSocketRouter := router.NewRouter(authService, messageService, webSockets, true)
+	err = webSocketRouter.Engine.Run(":8004")
+	if err != nil {
+		log.Fatalf("Websocket server failed to start: %s", err)
+	}
 }

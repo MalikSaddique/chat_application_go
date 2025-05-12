@@ -14,7 +14,7 @@ type Router struct {
 	WebSocketSvc   websockets.WebSockets
 }
 
-func NewRouter(authService authservice.AuthService, messageService messageservice.MessageService, webSocket websockets.WebSockets) *Router {
+func NewRouter(authService authservice.AuthService, messageService messageservice.MessageService, webSocket websockets.WebSockets, onlyWs bool) *Router {
 	engine := gin.Default()
 	routes := &Router{
 		Engine:         engine,
@@ -22,6 +22,10 @@ func NewRouter(authService authservice.AuthService, messageService messageservic
 		MessageService: messageService,
 		WebSocketSvc:   webSocket,
 	}
-	routes.defineRoutes()
+	if onlyWs {
+		routes.defineWebSocketRouter()
+	} else {
+		routes.defineRoutes()
+	}
 	return routes
 }

@@ -1,12 +1,9 @@
 package websocketsimpl
 
 import (
-	"encoding/json"
 	"log"
-	"strconv"
 	"sync"
 
-	"github.com/MalikSaddique/chat_application_go/models"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
@@ -21,25 +18,6 @@ func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn, c *gin.C
 
 	log.Println("User connected:", userID)
 
-	userIDstr, err := strconv.Atoi(userID)
-	if err != nil {
-		log.Println("Error: ", err)
-	}
-
-	pendingMessages, err := w.MessageService.GetUndeliveredMessages(int64(userIDstr))
-	if err == nil {
-		for _, m := range pendingMessages {
-			msgResp := models.MessageResponse{
-				SenderID:   m.SenderID,
-				ReceiverID: m.ReceiverID,
-				Message:    m.Message,
-				Timestamp:  m.Timestamp,
-			}
-
-			msgBytes, _ := json.Marshal(msgResp)
-			wsConn.WriteMessage(websocket.TextMessage, msgBytes)
-		}
-	}
 	defer func() {
 		ConnLock.Lock()
 		delete(ConnMap, userID)
@@ -49,12 +27,13 @@ func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn, c *gin.C
 	}()
 
 	for {
-		_, _, err := wsConn.ReadMessage()
+		_, msgData, err := wsConn.ReadMessage()
 		if err != nil {
-			log.Println("Error reading message:", err)
+			log.Println("Error reading message", err)
 			break
 		}
-	}
 
+		log.Println("Received message from", userID, string(msgData))
+	}
 	return nil
 }
