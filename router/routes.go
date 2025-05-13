@@ -23,11 +23,3 @@ func (r *Router) defineRoutes() {
 	}
 
 }
-
-func (r *Router) defineWebSocketRouter() {
-	protected := r.Engine.Group("/protected")
-	protected.Use(middleware.AuthMiddleware())
-	{
-		protected.GET("/ws", r.StartWebSocketServer)
-	}
-}

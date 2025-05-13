@@ -4,7 +4,7 @@ import (
 	messageservice "github.com/MalikSaddique/chat_application_go/controllers/message_service"
 	mongodb "github.com/MalikSaddique/chat_application_go/db/mongoDB"
 	db "github.com/MalikSaddique/chat_application_go/db/postgresDB"
-	websockets "github.com/MalikSaddique/chat_application_go/web_sockets"
+	websockets "github.com/MalikSaddique/socket/websockets"
 )
 
 type MessageServiceImpl struct {

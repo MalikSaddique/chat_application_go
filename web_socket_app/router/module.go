@@ -1,24 +1,26 @@
 package router
 
 import (
-	authservice "github.com/MalikSaddique/chat_application_go/controllers/auth_service"
 	messageservice "github.com/MalikSaddique/chat_application_go/controllers/message_service"
+	"github.com/MalikSaddique/socket/websockets"
+
+	// websockets "github.com/MalikSaddique/chat_application_go/web_sockets"
 	"github.com/gin-gonic/gin"
 )
 
 type Router struct {
 	Engine         *gin.Engine
-	AuthService    authservice.AuthService
 	MessageService messageservice.MessageService
+	WebSocketSvc   websockets.WebSockets
 }
 
-func NewRouter(authService authservice.AuthService, messageService messageservice.MessageService) *Router {
+func NewRouter(messageService messageservice.MessageService, websocket websockets.WebSockets) *Router {
 	engine := gin.Default()
 	routes := &Router{
 		Engine:         engine,
-		AuthService:    authService,
 		MessageService: messageService,
+		WebSocketSvc:   websocket,
 	}
-	routes.defineRoutes()
+	routes.defineWebSocketRouter()
 	return routes
 }

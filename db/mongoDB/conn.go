@@ -15,7 +15,8 @@ var (
 )
 
 func MongoDbConn() (*mongo.Client, error) {
-	url := os.Getenv("mongoURL")
+	url := os.Getenv("MONGODB_URI")
+	fmt.Println("jhjhjh", url)
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(url))
 	if err != nil {
 		log.Fatal(err)

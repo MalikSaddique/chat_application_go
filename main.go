@@ -7,7 +7,8 @@ import (
 	db "github.com/MalikSaddique/chat_application_go/db/postgresDB"
 	"github.com/MalikSaddique/chat_application_go/pkg/logger"
 	"github.com/MalikSaddique/chat_application_go/router"
-	websocketsimpl "github.com/MalikSaddique/chat_application_go/web_sockets/web_sockets_impl"
+
+	websocketsimpl "github.com/MalikSaddique/socket/websockets/websocketsimpl"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
@@ -40,16 +41,9 @@ func main() {
 	webSockets := websocketsimpl.NewWebSockets(messagedb)
 	messageService := messageserviceimpl.NewMessageService(messagedb, webSockets)
 
-	httpRouter := router.NewRouter(authService, messageService, webSockets, false)
-	go func() {
-		if err := httpRouter.Engine.Run(":8003"); err != nil {
-			log.Fatalf("HTTP server failed to start: %s", err)
-		}
-	}()
-
-	webSocketRouter := router.NewRouter(authService, messageService, webSockets, true)
-	err = webSocketRouter.Engine.Run(":8004")
-	if err != nil {
-		log.Fatalf("Websocket server failed to start: %s", err)
+	httpRouter := router.NewRouter(authService, messageService)
+	if err := httpRouter.Engine.Run(":8003"); err != nil {
+		log.Fatalf("HTTP server failed to start: %s", err)
 	}
+
 }

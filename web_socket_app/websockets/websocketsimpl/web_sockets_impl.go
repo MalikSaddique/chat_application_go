@@ -3,7 +3,7 @@ package websocketsimpl
 import (
 	mongodb "github.com/MalikSaddique/chat_application_go/db/mongoDB"
 	db "github.com/MalikSaddique/chat_application_go/db/postgresDB"
-	websockets "github.com/MalikSaddique/chat_application_go/web_sockets"
+	websockets "github.com/MalikSaddique/socket/websockets"
 )
 
 type WebSocketsImpl struct {
