@@ -11,29 +11,28 @@ import (
 var ConnMap = make(map[string]*websocket.Conn)
 var ConnLock = sync.Mutex{}
 
-func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn, c *gin.Context) error {
+func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn, c *gin.Context) {
 	ConnLock.Lock()
 	ConnMap[userID] = wsConn
 	ConnLock.Unlock()
 
-	log.Println("User connected:", userID)
+	log.Println("co", ConnMap)
 
-	defer func() {
-		ConnLock.Lock()
-		delete(ConnMap, userID)
-		ConnLock.Unlock()
-		wsConn.Close()
-		log.Println("User disconnected:", userID)
-	}()
+	// defer func() {
+	// 	ConnLock.Lock()
+	// 	delete(ConnMap, userID)
+	// 	ConnLock.Unlock()
+	// 	wsConn.Close()
+	// 	log.Println("User disconnected:", userID)
+	// }()
 
 	for {
-		_, msgData, err := wsConn.ReadMessage()
+		_, _, err := wsConn.ReadMessage()
 		if err != nil {
-			log.Println("Error reading message", err)
+			delete(ConnMap, userID)
+			wsConn.Close()
+			log.Printf("Client %s disconnected", userID)
 			break
 		}
-
-		log.Println("Received message from", userID, string(msgData))
 	}
-	return nil
 }

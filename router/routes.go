@@ -19,7 +19,6 @@ func (r *Router) defineRoutes() {
 		protected.GET("/message", r.GetMessages)
 		protected.GET("/update/:_id", r.UpdateMessage)
 		protected.GET("/delete/:_id", r.DeleteMessage)
-		// protected.GET("/ws", r.StartWebSocketServer)
 	}
 
 }

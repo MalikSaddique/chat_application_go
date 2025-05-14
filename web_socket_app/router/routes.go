@@ -7,5 +7,6 @@ func (r *Router) defineWebSocketRouter() {
 	protected.Use(middleware.AuthMiddleware())
 	{
 		protected.GET("/ws", r.StartWebSocketServer)
+		protected.GET("/send", r.SendMessageHTTPHandler)
 	}
 }

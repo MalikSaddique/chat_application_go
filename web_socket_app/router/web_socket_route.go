@@ -21,9 +21,9 @@ func (r *Router) StartWebSocketServer(c *gin.Context) {
 		return
 	}
 	go func() {
-		err = r.WebSocketSvc.AddConn(userID, wsConn, c)
-		if err != nil {
-			log.Println("AddConn error:", err)
-		}
+		r.WebSocketSvc.AddConn(userID, wsConn, c)
+		// if err != nil {
+		// 	log.Println("AddConn error:", err)
+		// }
 	}()
 }
