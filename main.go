@@ -7,6 +7,7 @@ import (
 	db "github.com/MalikSaddique/chat_application_go/db/postgresDB"
 	"github.com/MalikSaddique/chat_application_go/pkg/logger"
 	"github.com/MalikSaddique/chat_application_go/router"
+	websocketclient "github.com/MalikSaddique/chat_application_go/web_socket_client"
 
 	websocketsimpl "github.com/MalikSaddique/socket/websockets/websocketsimpl"
 	"github.com/joho/godotenv"
@@ -40,6 +41,11 @@ func main() {
 
 	webSockets := websocketsimpl.NewWebSockets(messagedb)
 	messageService := messageserviceimpl.NewMessageService(messagedb, webSockets)
+
+	stoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvQGdtYWlsLmNvbSIsImV4cCI6MTc0NzMxODkxOSwidXNlcl9pZCI6MTR9.fVClAUqLiRNbt_g2V0v23woQbTi12ltxhID6rkUjF6E"
+	rtoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvMTFAZ21haWwuY29tIiwiZXhwIjoxNzQ3MzE4OTYzLCJ1c2VyX2lkIjoxNX0.zAZlbaVdmYWZqlA2ivuoL1gQswkRtB8h3j0GVn7JvfM"
+	go websocketclient.ConnectToWebSocketServer("ws://localhost:8004/protected/ws", stoken)
+	go websocketclient.ConnectToWebSocketServer("ws://localhost:8004/protected/ws", rtoken)
 
 	httpRouter := router.NewRouter(authService, messageService)
 	if err := httpRouter.Engine.Run(":8003"); err != nil {

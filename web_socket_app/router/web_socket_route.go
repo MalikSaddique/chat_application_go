@@ -20,6 +20,7 @@ func (r *Router) StartWebSocketServer(c *gin.Context) {
 		log.Println("WebSocket Upgrade failed:", err)
 		return
 	}
+	log.Printf("WebSocket route hit with userID param: %s", userID)
 	go func() {
 		err = r.WebSocketSvc.AddConn(userID, wsConn, c)
 		if err != nil {
