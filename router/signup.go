@@ -14,7 +14,7 @@ import (
 // @Tags         auth
 // @Accept       json
 // @Produce      json
-// @Param        user  body  models.UserLoginReq  true  "User Info"
+// @Param        user  body  models.UserSignUp  true  "User Info"
 // @Success      201
 // @Failure      400
 // @Router       /signup [post]

@@ -8,6 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// SendMessage godoc
+// @Summary      Send a message
+// @Description  Send a message from authenticated user to another user
+// @Tags         messages
+// @Accept       json
+// @Produce      json
+// @Param        message  body      models.Message  true  "Message data"
+// @Success      200
+// @Failure      400
+// @Failure      401
+// @Security     BearerAuth
+// @Router       /sendmessage [post]
 func (r *Router) SendMessage(c *gin.Context) {
 	var msg models.Message
 	userIDstr := c.MustGet("userID").(string)

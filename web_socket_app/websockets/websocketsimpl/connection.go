@@ -22,16 +22,15 @@ func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn, c *gin.C
 
 	log.Println("User connected:", uid)
 
-	defer func() {
-		ConnLock.Lock()
-		delete(w.Clients, uid)
-		ConnLock.Unlock()
-		wsConn.Close()
-		log.Println("User disconnected:", uid)
-	}()
+	// defer func() {
+	// 	ConnLock.Lock()
+	// 	delete(w.Clients, uid)
+	// 	ConnLock.Unlock()
+	// 	wsConn.Close()
+	// 	log.Println("User disconnected:", uid)
+	// }()
 
 	for {
-		// var incoming map[string]any
 		var incoming messageserviceimpl.ServerMesageToSocket
 		err := wsConn.ReadJSON(&incoming)
 		if err != nil {
@@ -39,7 +38,7 @@ func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn, c *gin.C
 			break
 		}
 
-		log.Println("Received JSON from", uid, incoming)
+		log.Println("Received JSON from", userID, incoming)
 
 		action := incoming.Action
 

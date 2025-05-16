@@ -1,5 +1,13 @@
 package main
 
+// @title Go Chat App
+// @version 1.0
+// @description This is a chat application API built with Go and Gin.
+// @host localhost:8003
+// @BasePath /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 import (
 	authserviceimpl "github.com/MalikSaddique/chat_application_go/controllers/auth_service/auth_service_impl"
 	messageserviceimpl "github.com/MalikSaddique/chat_application_go/controllers/message_service/message_service_impl"
@@ -42,8 +50,8 @@ func main() {
 	webSockets := websocketsimpl.NewWebSockets(messagedb)
 	messageService := messageserviceimpl.NewMessageService(messagedb, webSockets)
 
-	stoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvQGdtYWlsLmNvbSIsImV4cCI6MTc0NzMxODkxOSwidXNlcl9pZCI6MTR9.fVClAUqLiRNbt_g2V0v23woQbTi12ltxhID6rkUjF6E"
-	rtoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvMTFAZ21haWwuY29tIiwiZXhwIjoxNzQ3MzE4OTYzLCJ1c2VyX2lkIjoxNX0.zAZlbaVdmYWZqlA2ivuoL1gQswkRtB8h3j0GVn7JvfM"
+	stoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvMTFAZ21haWwuY29tIiwiZXhwIjoxNzQ3NDIxNjkyLCJ1c2VyX2lkIjoxfQ.zeirvbh6hJf2xYBwLNgh41YHPcKvaJEIe-3cXwigfa0"
+	rtoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvQGdtYWlsLmNvbSIsImV4cCI6MTc0NzQyMTczNywidXNlcl9pZCI6Mn0.c340QL6dfHHzmp3oPNEYlCiYTuYiVtthOgeALO8-1zo"
 	go websocketclient.ConnectToWebSocketServer("ws://localhost:8004/protected/ws", stoken)
 	go websocketclient.ConnectToWebSocketServer("ws://localhost:8004/protected/ws", rtoken)
 

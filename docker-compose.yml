@@ -25,6 +25,20 @@ services:
     networks:
       - jwt-network
 
+  websocket:
+    build:
+      context: .
+      dockerfile: web_socket_app/DockerFile
+    container_name: websocket-service
+    ports:
+      - "8004:8004"
+    depends_on:
+      - mongoDb
+    env_file:
+      - ./web_socket_app/.env
+    networks:
+      - jwt-network
+
   app:
     build:
       context: .

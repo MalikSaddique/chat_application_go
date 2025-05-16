@@ -8,6 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetMessages godoc
+// @Summary      Get messages
+// @Description  Retrieve messages between two users
+// @Tags         messages
+// @Produce      json
+// @Param        sender_id    query  string  true  "Sender ID"
+// @Param        reciever_id  query  string  true  "Receiver ID"
+// @Success      200          {array}   models.Message
+// @Failure      400
+// @Failure      500
+// @Security     BearerAuth
+// @Router       /getmessage [get]
 func (r *Router) GetMessages(c *gin.Context) {
 
 	senderIDStr := c.Query("sender_id")

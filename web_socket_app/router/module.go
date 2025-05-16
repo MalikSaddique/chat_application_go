@@ -3,8 +3,6 @@ package router
 import (
 	messageservice "github.com/MalikSaddique/chat_application_go/controllers/message_service"
 	"github.com/MalikSaddique/socket/websockets"
-
-	// websockets "github.com/MalikSaddique/chat_application_go/web_sockets"
 	"github.com/gin-gonic/gin"
 )
 
