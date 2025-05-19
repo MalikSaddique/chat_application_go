@@ -50,8 +50,8 @@ func main() {
 	webSockets := websocketsimpl.NewWebSockets(messagedb)
 	messageService := messageserviceimpl.NewMessageService(messagedb, webSockets)
 
-	stoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvMTFAZ21haWwuY29tIiwiZXhwIjoxNzQ3NDIxNjkyLCJ1c2VyX2lkIjoxfQ.zeirvbh6hJf2xYBwLNgh41YHPcKvaJEIe-3cXwigfa0"
-	rtoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvQGdtYWlsLmNvbSIsImV4cCI6MTc0NzQyMTczNywidXNlcl9pZCI6Mn0.c340QL6dfHHzmp3oPNEYlCiYTuYiVtthOgeALO8-1zo"
+	stoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvMTFAZ21haWwuY29tIiwiZXhwIjoxNzQ3NjU5NDMyLCJ1c2VyX2lkIjoxfQ.6cv2pq8jc0szBymhIY1EuMBeo7DmcptooRnMw5-egvA"
+	rtoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvQGdtYWlsLmNvbSIsImV4cCI6MTc0NzY1OTU0MiwidXNlcl9pZCI6Mn0.ZDqR3UrdoTz8iHKuaNbxSpUVQ-pzmt6kMGJL6qBBHEA"
 	go websocketclient.ConnectToWebSocketServer("ws://localhost:8004/protected/ws", stoken)
 	go websocketclient.ConnectToWebSocketServer("ws://localhost:8004/protected/ws", rtoken)
 

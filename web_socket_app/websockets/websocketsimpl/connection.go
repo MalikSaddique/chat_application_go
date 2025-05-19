@@ -22,13 +22,13 @@ func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn, c *gin.C
 
 	log.Println("User connected:", uid)
 
-	// defer func() {
-	// 	ConnLock.Lock()
-	// 	delete(w.Clients, uid)
-	// 	ConnLock.Unlock()
-	// 	wsConn.Close()
-	// 	log.Println("User disconnected:", uid)
-	// }()
+	defer func() {
+		ConnLock.Lock()
+		delete(w.Clients, uid)
+		ConnLock.Unlock()
+		wsConn.Close()
+		log.Println("User disconnected:", uid)
+	}()
 
 	for {
 		var incoming messageserviceimpl.ServerMesageToSocket
