@@ -34,6 +34,8 @@ func (r *Router) SendMessage(c *gin.Context) {
 		return
 	}
 
+	msg.SenderID = userID
+
 	err = r.MessageService.SendMessage(c, msg)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send message"})

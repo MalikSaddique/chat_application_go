@@ -20,12 +20,6 @@ func (m *MessageServiceImpl) SendMessage(c *gin.Context, msg models.Message) err
 	if err != nil {
 		return err
 	}
-	// m.WebSocket.SendMessage(&msg)
-	// messageToSend := map[string]any{
-	// 	"action":        "send",
-	// 	"destinationID": msg.ReceiverID,
-	// 	"message":       msg.Message,
-	// }
 
 	messageToSend := ServerMesageToSocket{
 		Action:        "send",

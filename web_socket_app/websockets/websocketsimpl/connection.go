@@ -4,6 +4,7 @@ import (
 	"log"
 	"strconv"
 	"sync"
+	"time"
 
 	messageserviceimpl "github.com/MalikSaddique/chat_application_go/controllers/message_service/message_service_impl"
 	"github.com/gin-gonic/gin"
@@ -12,9 +13,18 @@ import (
 
 var ConnLock = sync.Mutex{}
 
+const (
+	pingPeriod = 30 * time.Second
+	pongWait   = 60 * time.Second
+)
+
 func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn, c *gin.Context) error {
 	uid, _ := strconv.Atoi(userID)
 	ConnLock.Lock()
+	if existingConn, ok := w.Clients[uid]; ok {
+		existingConn.Close()
+	}
+
 	w.Clients[uid] = wsConn
 	ConnLock.Unlock()
 
@@ -28,6 +38,18 @@ func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn, c *gin.C
 		ConnLock.Unlock()
 		wsConn.Close()
 		log.Println("User disconnected:", uid)
+	}()
+
+	go func() {
+		ticker := time.NewTicker(pingPeriod)
+		defer ticker.Stop()
+
+		for range ticker.C {
+			if err := wsConn.WriteMessage(websocket.PingMessage, nil); err != nil {
+				log.Println("Ping error:", err)
+				return
+			}
+		}
 	}()
 
 	for {
@@ -51,12 +73,12 @@ func (w *WebSocketsImpl) AddConn(userID string, wsConn *websocket.Conn, c *gin.C
 			if conn, ok := w.Clients[receiverID]; ok {
 
 				err := conn.WriteJSON(map[string]any{
-					"receiverID": uid,
+					"receiverID": receiverID,
 					"message":    message,
 				})
 
 				if err != nil {
-					log.Println("Error writing JSON to receiver:", err)
+					log.Println("Error writing to receiver:", err)
 				}
 			} else {
 				log.Println("Receiver not connected:", receiverID)

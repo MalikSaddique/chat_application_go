@@ -2,21 +2,19 @@ package websocketclient
 
 import (
 	"log"
-	"net/http"
 
 	"github.com/gorilla/websocket"
 )
 
 var Conn *websocket.Conn
 
-func ConnectToWebSocketServer(url string, token string) {
+func ConnectToWebSocketServer(baseURL string, key string) {
+	wsURL := baseURL + "?key=" + key
+
 	var err error
-	header := http.Header{}
-	header.Add("Authorization", "Bearer "+token)
-	Conn, _, err = websocket.DefaultDialer.Dial(url, header)
+	Conn, _, err = websocket.DefaultDialer.Dial(wsURL, nil)
 	if err != nil {
 		log.Fatalf("Failed to connect to WebSocket server: %v", err)
 	}
 	log.Println("Connected to WebSocket server")
-
 }

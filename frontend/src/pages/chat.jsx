@@ -9,7 +9,9 @@ export default function Chat({onLogout}) {
         localStorage.removeItem('accessToken'); 
         onLogout(); 
       }}>
-        Logout
+         <div className="logout-container">
+    <button onClick={onLogout}>Logout</button>
+  </div>
       </button>
     </div>
   );

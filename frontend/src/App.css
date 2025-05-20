@@ -1,0 +1,146 @@
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #1c1b3a;
+  color: white;
+  min-height: 100vh;
+  justify-content: center; 
+  align-items: center; 
+}
+/* .logout-container {
+  /* margin-top: 16px; */
+  /* text-align: center; */
+/* } */ */
+
+.auth-container, .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+
+form {
+  background-color: #2d2c54;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+form input {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background-color: #eaf0ff;
+  font-size: 14px;
+}
+
+form button {
+  padding: 12px;
+  background-color: #4c4cff;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #3b3bf3;
+}
+
+
+.auth-link {
+  text-align: center;
+  margin-top: 10px;
+  color: white;
+  background-color: #4c4cff;
+  padding: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.auth-link:hover {
+  background-color: #3b3bf3;
+}
+
+/* === Chat Container === */
+.container {
+  width: 100%;
+  max-width: 500px;
+  background-color: #2d2c54;
+  border-radius: 20px;
+  padding: 20px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+input, button {
+  font-size: 14px;
+}
+
+.container input {
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  background-color: #eaf0ff;
+  color: black;
+  margin-bottom: 8px;
+}
+
+.container button {
+  padding: 10px 16px;
+  background-color: #4c4cff;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.container button:hover {
+  background-color: #3b3bf3;
+}
+
+
+.message-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 6px;
+}
+
+.message-item {
+  background-color: #3b3a60;
+  padding: 12px;
+  border-radius: 16px;
+  color: white;
+  font-size: 14px;
+  max-width: 75%;
+  align-self: flex-start;
+  word-wrap: break-word;
+}
+
+.message-list::-webkit-scrollbar {
+  width: 6px;
+}
+.message-list::-webkit-scrollbar-thumb {
+  background-color: #666;
+  border-radius: 8px;
+}

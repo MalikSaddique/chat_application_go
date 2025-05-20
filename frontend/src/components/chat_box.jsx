@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 import { WS_URL } from '../config';
+import UserSearch from './search_user';
 
 export default function ChatBox() {
   const [messages, setMessages] = useState([]);
@@ -29,6 +30,7 @@ export default function ChatBox() {
     };
   
     ws.current.onmessage = (event) => {
+      console.log("WebSocket raw message:", event.data);
       const receivedMessage = JSON.parse(event.data);
       console.log("WebSocket message received:", event.data);
       setMessages((prev) => [...prev, receivedMessage]);
@@ -79,9 +81,15 @@ export default function ChatBox() {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`
         }
       });
-      
-      const senderId = parseInt(localStorage.getItem('accessToken'));
-  
+      function parseJwt(token) {
+        try {
+          return JSON.parse(atob(token.split('.')[1]));
+        } catch (e) {
+          return null;
+        }
+      }
+      const senderId = parseJwt(localStorage.getItem('accessToken'))?.user_id;
+
       setMessages(prev => [...prev, { ...msgPayload, sender_id: senderId }]);
       setNewMsg('');
     } catch (err) {
@@ -90,7 +98,9 @@ export default function ChatBox() {
   };
 
   return (
-    <div>
+    <div className='container'>
+      <h2>📨 ChatBox</h2>
+      <UserSearch onUserSelect={(id) => setReceiverId(id)} />
       <h3>Send Message</h3>
       <input
         placeholder="Receiver ID"
@@ -107,10 +117,10 @@ export default function ChatBox() {
       <button onClick={handleSend}>Send</button>
 
       <hr />
-      <h3>Messages</h3>
-      <div>
+      <h3>🗨️ Messages</h3>
+      <div className='message-list'>
         {messages.map((msg, i) => (
-          <div key={i}>
+          <div key={i} className='message-item'>
             <strong>From {msg.sender_id} to {msg.receiver_id}:</strong> {msg.message}
           </div>
         ))}

@@ -9,6 +9,8 @@ package main
 // @in header
 // @name Authorization
 import (
+	"os"
+
 	authserviceimpl "github.com/MalikSaddique/chat_application_go/controllers/auth_service/auth_service_impl"
 	messageserviceimpl "github.com/MalikSaddique/chat_application_go/controllers/message_service/message_service_impl"
 	mongodb "github.com/MalikSaddique/chat_application_go/db/mongoDB"
@@ -28,6 +30,7 @@ func main() {
 	log.Infof("App started")
 
 	err := godotenv.Load(".env")
+	key := os.Getenv("BACKEND_WS_KEY")
 	if err != nil {
 		log.Fatalf("Error loading .env file: %s", err)
 	}
@@ -50,10 +53,7 @@ func main() {
 	webSockets := websocketsimpl.NewWebSockets(messagedb)
 	messageService := messageserviceimpl.NewMessageService(messagedb, webSockets)
 
-	stoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvMTFAZ21haWwuY29tIiwiZXhwIjoxNzQ3NjU5NDMyLCJ1c2VyX2lkIjoxfQ.6cv2pq8jc0szBymhIY1EuMBeo7DmcptooRnMw5-egvA"
-	rtoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGxvQGdtYWlsLmNvbSIsImV4cCI6MTc0NzY1OTU0MiwidXNlcl9pZCI6Mn0.ZDqR3UrdoTz8iHKuaNbxSpUVQ-pzmt6kMGJL6qBBHEA"
-	go websocketclient.ConnectToWebSocketServer("ws://localhost:8004/protected/ws", stoken)
-	go websocketclient.ConnectToWebSocketServer("ws://localhost:8004/protected/ws", rtoken)
+	go websocketclient.ConnectToWebSocketServer("ws://localhost:8004/backend/ws", key)
 
 	httpRouter := router.NewRouter(authService, messageService)
 	if err := httpRouter.Engine.Run(":8003"); err != nil {
