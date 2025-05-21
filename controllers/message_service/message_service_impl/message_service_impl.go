@@ -10,6 +10,7 @@ import (
 type MessageServiceImpl struct {
 	MessageAuth mongodb.MessageInterface
 	WebSocket   websockets.WebSockets
+	UserAuth    db.Storage
 }
 
 func NewMessageService(input mongodb.MessageInterface, web websockets.WebSockets) messageservice.MessageService {

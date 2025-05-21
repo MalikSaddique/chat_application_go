@@ -13,6 +13,7 @@ var log = logger.Logger("Postgres-DB")
 type Storage interface {
 	FindUserByEmail(email string) (*models.UserLogin, error)
 	SignUp(c *gin.Context, req *models.UserSignUp) *models.UserSignUp
+	SearchUser(email string) ([]models.UserResponse, error)
 }
 
 type StorageImpl struct {

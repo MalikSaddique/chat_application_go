@@ -13,7 +13,7 @@ type MessageInterface interface {
 	SaveMessage(c *gin.Context, msg models.Message) error
 	FetchMessages(senderID, receiverID int64, skip, limit int) ([]models.Message, error)
 	UpdateMessageDB(c context.Context, id primitive.ObjectID, updatedMsg *models.Message) error
-	DeleteMessageDB(c context.Context, id primitive.ObjectID) error
+	DeleteMessageDB(c *gin.Context, id primitive.ObjectID) error
 }
 
 type MessageInterfaceImpl struct {

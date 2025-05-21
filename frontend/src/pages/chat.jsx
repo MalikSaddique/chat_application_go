@@ -5,14 +5,6 @@ export default function Chat({onLogout}) {
     <div>
       <h2>Chat Room</h2>
       <ChatBox />
-      <button onClick={() => {
-        localStorage.removeItem('accessToken'); 
-        onLogout(); 
-      }}>
-         <div className="logout-container">
-    <button onClick={onLogout}>Logout</button>
-  </div>
-      </button>
     </div>
   );
 }

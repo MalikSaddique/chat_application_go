@@ -1,16 +1,16 @@
 package mongodb
 
 import (
-	"context"
 	"fmt"
 	"strconv"
 
 	"github.com/MalikSaddique/chat_application_go/models"
+	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (u *MessageInterfaceImpl) DeleteMessageDB(c context.Context, id primitive.ObjectID) error {
+func (u *MessageInterfaceImpl) DeleteMessageDB(c *gin.Context, id primitive.ObjectID) error {
 	userID := c.Value("userID")
 	collection := u.mongoClient.Database("chat_app_go").Collection("messages")
 	var msg models.Message

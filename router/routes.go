@@ -12,6 +12,7 @@ func (r *Router) defineRoutes() {
 	r.Engine.POST("/signup", r.SignUp)
 	r.Engine.POST("/login", r.Login)
 	r.Engine.GET("/refresh", r.RefreshKey)
+	r.Engine.GET("/search", r.SearchUser)
 	protected := r.Engine.Group("/protected")
 	protected.Use(middleware.AuthMiddleware())
 	{
@@ -19,7 +20,7 @@ func (r *Router) defineRoutes() {
 		protected.GET("/message", r.GetMessages)
 		protected.GET("/update/:_id", r.UpdateMessage)
 		protected.GET("/delete/:_id", r.DeleteMessage)
-		// protected.GET("/ws", r.StartWebSocketServer)
+		protected.GET("/search", r.SearchUser)
 	}
 
 }

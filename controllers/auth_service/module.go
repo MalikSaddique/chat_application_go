@@ -9,4 +9,5 @@ type AuthService interface {
 	Login(c *gin.Context, login *models.UserLogin) (*models.TokenPair, error)
 	SignUp(c *gin.Context, req *models.UserSignUp) *models.UserSignUp
 	RefreshAccessToken(c *gin.Context) (string, error)
+	SearchUser(c *gin.Context, email string) ([]models.UserResponse, error)
 }

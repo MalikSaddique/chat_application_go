@@ -3,17 +3,17 @@ import axios from 'axios';
 
 
 const axiosInstance = axios.create({
-  method : "POST",
+  // method : "POST",
   baseURL: import.meta.env.VITE_API_URL,
   
-  // headers: {
-  //   'Content-Type': 'application/json',
-  // },
-  body: JSON.stringify({
-    email: "email",
-    password: "password"
-  }),
-  // withCredentials: true
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  // body: JSON.stringify({
+  //   email: "email",
+  //   password: "password"
+  // }),
+  // // withCredentials: true
 });
 
 export default axiosInstance;

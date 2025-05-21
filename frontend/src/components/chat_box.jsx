@@ -12,68 +12,59 @@ export default function ChatBox() {
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (!token) return;
-  
+
     const wsUrl = `${WS_URL}?token=${token}`;
     ws.current = new WebSocket(wsUrl);
-  
+
     ws.current.onopen = () => {
       console.log('WebSocket connected');
-      ws.current.send(JSON.stringify({
-        action: 'ping',
-        message: 'hello from client'
-      }));
-      ws.current.send(JSON.stringify({
-        action: 'ping',
-        message: 'hi',
-      }));
-      
+      ws.current.send(JSON.stringify({ action: 'ping', message: 'hello from client' }));
+      ws.current.send(JSON.stringify({ action: 'ping', message: 'hi' }));
     };
-  
+
     ws.current.onmessage = (event) => {
       console.log("WebSocket raw message:", event.data);
       const receivedMessage = JSON.parse(event.data);
       console.log("WebSocket message received:", event.data);
-      setMessages((prev) => [...prev, receivedMessage]);
+      setMessages((prev) => [...prev, { ...receivedMessage, timestamp: new Date().toLocaleTimeString() }]);
     };
-  
+
     ws.current.onerror = (error) => {
       console.error('WebSocket error:', error);
     };
-  
+
     ws.current.onclose = () => {
       console.log('WebSocket closed');
     };
-  
+
     return () => {
       if (ws.current) {
         ws.current.close();
       }
     };
   }, []);
-  
+
   const fetchMessages = async () => {
     try {
-      const res = await axiosInstance.post('/protected/message', msgPayload, {
+      const res = await axiosInstance.post('/protected/message', { receiver_id: parseInt(receiverId) }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`
         }
       });
-      
-      setMessages(res.data);
+      setMessages(res.data.map(msg => ({ ...msg, timestamp: new Date().toLocaleTimeString() })));
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
   };
 
-  const handleSend = async() => {
-    if (newMsg.trim() === '' || receiverId.trim() === '') return;
- 
+  const handleSend = async () => {
+    if (newMsg.trim() === '' || String(receiverId).trim() === '') return;
+
     const msgPayload = {
       receiver_id: parseInt(receiverId),
       message: newMsg
     };
     console.log("Sending message:", msgPayload);
-
 
     try {
       await axiosInstance.post('/protected/send', msgPayload, {
@@ -90,42 +81,58 @@ export default function ChatBox() {
       }
       const senderId = parseJwt(localStorage.getItem('accessToken'))?.user_id;
 
-      setMessages(prev => [...prev, { ...msgPayload, sender_id: senderId }]);
+      setMessages(prev => [...prev, { ...msgPayload, sender_id: senderId, timestamp: new Date().toLocaleTimeString() }]);
       setNewMsg('');
     } catch (err) {
       console.error('Error sending message:', err);
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    window.location.reload();
+  };
+
   return (
     <div className='container'>
-      <h2>📨 ChatBox</h2>
-      <UserSearch onUserSelect={(id) => setReceiverId(id)} />
-      <h3>Send Message</h3>
-      <input
-        placeholder="Receiver ID"
-        value={receiverId}
-        onChange={(e) => setReceiverId(e.target.value)}
-        style={{ width: '200px', marginRight: '10px' }}
-      />
-      <input
-        placeholder="Type a message"
-        value={newMsg}
-        onChange={(e) => setNewMsg(e.target.value)}
-        style={{ width: '300px', marginRight: '10px' }}
-      />
-      <button onClick={handleSend}>Send</button>
-
-      <hr />
-      <h3>🗨️ Messages</h3>
-      <div className='message-list'>
-        {messages.map((msg, i) => (
-          <div key={i} className='message-item'>
-            <strong>From {msg.sender_id} to {msg.receiver_id}:</strong> {msg.message}
-          </div>
-        ))}
-
+      <div className='chat-header'>
+        <h2>ChatBox</h2>
       </div>
+
+      <UserSearch onUserSelect={(id) => setReceiverId(id)} />
+
+      <div className='message-list'>
+        {messages.map((msg, i) => {
+          function parseJwt(token) {
+            try {
+              return JSON.parse(atob(token.split('.')[1]));
+            } catch (e) {
+              return null;
+            }
+          }
+          const currentUserId = parseJwt(localStorage.getItem('accessToken'))?.user_id;
+          const isSent = msg.sender_id === currentUserId;
+
+          return (
+            <div key={i} className={`message-item ${isSent ? 'sent' : 'received'}`}>
+              <strong>From {msg.sender_id} to {msg.receiver_id}:</strong> {msg.message}
+              <span className="message-timestamp">{msg.timestamp || '2:44PM'}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className='message-input-container'>
+        <input
+          className='message-input'
+          placeholder="Send a message"
+          value={newMsg}
+          onChange={(e) => setNewMsg(e.target.value)}
+        />
+        <button className='send-button' onClick={handleSend}>Send</button>
+      </div>
+
+      <button className='logout-button' onClick={handleLogout}>Logout</button>
     </div>
   );
 }
