@@ -8,6 +8,19 @@ body, html {
   justify-content: center;
   align-items: center;
 }
+.icon-only-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 18px;
+  color: #fff; /* or any color that matches your UI */
+}
+
+.icon-only-button:hover {
+  color: #ccc; /* slightly lighter color on hover */
+}
+
 
 .user-search-container {
   position: relative;
@@ -47,7 +60,7 @@ body, html {
 
 
 /* Container for authentication forms */
-.auth-container, .container {
+/* .auth-container, .container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -88,7 +101,7 @@ form button {
 
 form button:hover {
   background-color: #3b3bf3;
-}
+} */
 
 
 .container {
@@ -110,21 +123,34 @@ form button:hover {
 
 .chat-header {
   background-color: #2d2c54;
-  padding: 20px 150px;
+  padding: 20px 30px;
   border-radius: 20px 20px 0 0;
-  position:relative;
-  top: 0;
-  z-index: 10;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .chat-header h2 {
-  margin: 0;
   font-size: 24px;
   color: white;
-  text-align: center; 
+  font-weight: bold;
+}
+.chat-header button{
+  position: absolute;
+  right: 20px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
 }
 
+.logout-button:hover {
+  color: #ccc;
+}
 
 .user-search-container {
   width: 100%;

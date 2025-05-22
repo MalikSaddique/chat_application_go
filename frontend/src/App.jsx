@@ -11,12 +11,12 @@ export default function App() {
     return showSignup ? (
       <>
         <SignUp />
-        <button onClick={() => setShowSignup(false)}>Already have an account?</button>
+        <button id='signup' onClick={() => setShowSignup(false)}>Already have an account?</button>
       </>
     ) : (
       <>
         <Login onLogin={() => setLoggedIn(true)} />
-        <button onClick={() => setShowSignup(true)}>New user? Sign Up</button>
+        <button id='login' onClick={() => setShowSignup(true)}>New user? Sign Up</button>
       </>
     );
   }

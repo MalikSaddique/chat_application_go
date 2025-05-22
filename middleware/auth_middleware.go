@@ -87,28 +87,20 @@ func WSMiddleware() gin.HandlerFunc {
 func BackendWSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		fmt.Println(105)
-
 		err := godotenv.Load(".env")
 		if err != nil {
 			log.Fatalf("Error loading .env file: %s", err)
 		}
-		fmt.Println(105)
-
 		recievedKey := c.Query("key")
 		if recievedKey == "" {
-			fmt.Println(115)
 
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token query parameter missing"})
 			c.Abort()
 			return
 		}
-		fmt.Println("key from query:", recievedKey)
-
 		key := os.Getenv("BACKEND_WS_KEY")
 
 		if key != recievedKey {
-			fmt.Println(128)
 
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid key"})
 			c.Abort()

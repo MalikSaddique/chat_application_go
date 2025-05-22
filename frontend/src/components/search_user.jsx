@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axiosInstance';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function UserSearch({ onUserSelect }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -49,7 +52,8 @@ export default function UserSearch({ onUserSelect }) {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <button className="container-button" onClick={handleSearch}>Search</button>
+      
+
 
       {searchResults.length > 0 && (
         <ul className="dropdown-list">

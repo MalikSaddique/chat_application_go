@@ -2,6 +2,11 @@ import { useEffect, useState, useRef } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 import { WS_URL } from '../config';
 import UserSearch from './search_user';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+
+
 
 export default function ChatBox() {
   const [messages, setMessages] = useState([]);
@@ -97,6 +102,9 @@ export default function ChatBox() {
     <div className='container'>
       <div className='chat-header'>
         <h2>ChatBox</h2>
+        <button className="icon-only-button" onClick={handleLogout}>
+         <FontAwesomeIcon icon={faRightFromBracket} />
+        </button>
       </div>
 
       <UserSearch onUserSelect={(id) => setReceiverId(id)} />
@@ -115,7 +123,7 @@ export default function ChatBox() {
 
           return (
             <div key={i} className={`message-item ${isSent ? 'sent' : 'received'}`}>
-              <strong>From {msg.sender_id} to {msg.receiver_id}:</strong> {msg.message}
+               {msg.message}
               <span className="message-timestamp">{msg.timestamp || '2:44PM'}</span>
             </div>
           );
@@ -129,10 +137,13 @@ export default function ChatBox() {
           value={newMsg}
           onChange={(e) => setNewMsg(e.target.value)}
         />
-        <button className='send-button' onClick={handleSend}>Send</button>
-      </div>
+        <button className="icon-only-button" onClick={handleSend}>
+  <FontAwesomeIcon icon={faPaperPlane} />
+</button>
 
-      <button className='logout-button' onClick={handleLogout}>Logout</button>
+
+
+      </div>
     </div>
   );
 }

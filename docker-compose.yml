@@ -38,6 +38,22 @@ services:
       - ./web_socket_app/.env
     networks:
       - jwt-network
+  
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/DockerFile
+    container_name: react-frontend
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - app
+      - websocket
+    networks:
+      - jwt-network
+
 
   app:
     build:
