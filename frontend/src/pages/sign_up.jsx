@@ -17,7 +17,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="wrapper signIn">
+    <div className="" style={{border:"4px solid black"}}>
     <div className="form">
     <form onSubmit={handleSignup}>
     <div className="heading">SIGN-UP</div>

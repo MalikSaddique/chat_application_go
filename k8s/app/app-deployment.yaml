@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: chatting-app
-          image: chatting-app:latest
-          imagePullPolicy: Never
+          image: siddique292/chat_application_go-app:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8002
           envFrom:

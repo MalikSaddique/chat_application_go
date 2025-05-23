@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: react-frontend
-          image: react-frontend:latest
-          imagePullPolicy: Never
+          image: siddique292/chat_application_go-frontend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 5173
           envFrom:

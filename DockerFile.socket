@@ -3,7 +3,8 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod tidy
 COPY . .
-RUN CGO_ENABLED=0 go build -o websocket-service main.go
+RUN ls -al
+RUN ls -al && CGO_ENABLED=0 go build -o websocket-service web_socket_app/main.go
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
