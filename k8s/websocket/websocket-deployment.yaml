@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: websocket-service
-          image: websocket-service:latest
-          imagePullPolicy: Never
+          image: siddique292/chat_application_go-websocket:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8004
           envFrom:
@@ -49,8 +49,8 @@ spec:
     spec:
       containers:
         - name: websocket-service
-          image: websocket-service:latest
-          imagePullPolicy: Never
+          image: siddique292/chat_application_go-websocket:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8004
           envFrom:
@@ -68,3 +68,4 @@ spec:
     - protocol: TCP
       port: 8004
       targetPort: 8004
+
