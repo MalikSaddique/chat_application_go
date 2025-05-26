@@ -18,9 +18,6 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8004
-          envFrom:
-            - configMapRef:
-                name: websocket-env
 ---
 apiVersion: v1
 kind: Service

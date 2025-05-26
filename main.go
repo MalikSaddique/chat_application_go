@@ -53,7 +53,7 @@ func main() {
 	webSockets := websocketsimpl.NewWebSockets(messagedb)
 	messageService := messageserviceimpl.NewMessageService(messagedb, webSockets)
 
-	go websocketclient.ConnectToWebSocketServer("ws://localhost:8004/backend/ws", key)
+	go websocketclient.ConnectToWebSocketServer("ws://websocket-service:8004/backend/ws", key)
 
 	httpRouter := router.NewRouter(authService, messageService)
 	if err := httpRouter.Engine.Run(":8003"); err != nil {
