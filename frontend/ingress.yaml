@@ -1,18 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app-ingress
+  name: react-frontend-ingress
   annotations:
 spec:
   ingressClassName: nginx
   rules:
-    - host: app.local
+    - host: frontend.local
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: chatting-app
+                name: react-frontend
                 port:
-                  number: 8003
+                  number: 80

@@ -1,18 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app-ingress
+  name: websocket-ingress
   annotations:
 spec:
   ingressClassName: nginx
   rules:
-    - host: app.local
+    - host: websocket.local
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: chatting-app
+                name: websocket-service
                 port:
-                  number: 8003
+                  number: 8004

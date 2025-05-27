@@ -17,7 +17,7 @@ spec:
           image: siddique292/chat_application_go-frontend:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 5173
+            - containerPort: 80
           envFrom:
             - configMapRef:
                 name: frontend-env
@@ -32,6 +32,6 @@ spec:
   type: NodePort
   ports:
     - protocol: TCP
-      port: 5173
-      targetPort: 5173
+      port: 80
+      targetPort: 80
       nodePort: 30173
